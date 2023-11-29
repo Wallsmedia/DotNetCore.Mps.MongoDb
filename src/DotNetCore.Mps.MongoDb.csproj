@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>$(DotNetCoreVersions)</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MongoDB.Driver" Version="$(MongoDbVersion)" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageOutputPath>../.nupkgs</PackageOutputPath>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+
+		<PackageProjectUrl>https://github.com/Wallsmedia/DotNetCore.Mps.MongoDb</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Wallsmedia/DotNetCore.Mps.MongoDb.git</RepositoryUrl>
+		<RepositoryType>github</RepositoryType>
+		<AssemblyOriginatorKeyFile>..\build\Key.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>true</SignAssembly>
+
+		<PackageReleaseNotes>Supports $(TargetFrameworks).</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageTags>DotNetCore MongoDb</PackageTags>
+
+		<Description>Generic, based on type names, wrapper implementation of the MongoDB C# Sharp 2.+ driver (async).
+		</Description>
+
+		<RootNamespace>DotNetCore.Mps.MongoDb</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\LICENSE.txt">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>
