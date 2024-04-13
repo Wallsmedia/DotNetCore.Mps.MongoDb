@@ -12,6 +12,6 @@
   <ItemGroup>
 	<PackageReference Include="AutoFixture" Version="4.18.1" />
 	<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-	<PackageReference Include="DotNetCore.Mps.MongoDb" Version="2.0.*" />
+	<PackageReference Include="DotNetCore.Mps.MongoDb" Version="2.0.1" />
   </ItemGroup>
 </Project>

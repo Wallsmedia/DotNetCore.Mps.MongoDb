@@ -95,7 +95,7 @@ public class MongoDbContext : IMongoDbContext
     /// <param name="guidRepresentation">The new value of the GuidRepresentation</param>
     public virtual void SetGuidRepresentation(MongoDB.Bson.GuidRepresentation guidRepresentation)
     {
-        BsonSerializer.RegisterSerializer(new GuidSerializer(guidRepresentation);
+        BsonSerializer.RegisterSerializer(new GuidSerializer(guidRepresentation));
     }
 
     /// <summary>

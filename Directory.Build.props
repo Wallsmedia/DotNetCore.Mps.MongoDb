@@ -10,7 +10,7 @@
 
 		<FluentAssertionsVersion>6.12.0</FluentAssertionsVersion>
 		<MicrosoftNETTestSdk>17.7.2</MicrosoftNETTestSdk>
-		<MongoDbVersion>2.22.0</MongoDbVersion>
+		<MongoDbVersion>2.25.0</MongoDbVersion>
 		<xunitVersion>2.5.0</xunitVersion>
 		<xunitrunnervisualstudioVersion>2.5.0</xunitrunnervisualstudioVersion>
 		<coverletcollectorVersion>6.0.0</coverletcollectorVersion>
@@ -21,7 +21,7 @@
 		<Product>DotNet Mps MongoDb Access</Product>
 		<Authors>Wallsmedia Ltd</Authors>
 		<Copyright>Copyright $([System.DateTime]::Now.ToString('yyyy')) © Artem &amp; Alex Paskhin. All rights reserved.</Copyright>
-		<Version>2.0.0</Version>
+		<Version>2.0.1</Version>
 	</PropertyGroup>
 
 </Project>

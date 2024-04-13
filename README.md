@@ -17,8 +17,9 @@ Features:
 
 - Nuget package [DotNet.Mps.MongoDb](https://www.nuget.org/packages/DotNetCore.Mps.MongoDb/)
 
-### Version: 2.0.0
+### Version: 2.0.1
 - supports **netstandard2.0**
+- updated driver version
 
 
 # POC Example or How to 
