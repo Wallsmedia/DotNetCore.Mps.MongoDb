@@ -1,5 +1,5 @@
 ## DotNetCore MicroService Platform MongoDB Access 
-This package is based on breaking and deep design/interface changes, including re-engineering and refactoring of the original [MongoDb Generic Repository](https://github.com/alexandre-spieser/mongodb-generic-repository).
+This package is based on breaking and deep design/interface changes, including re-engineering and refactoring of the original *MongoDb Generic Repository*
 
 Features:
 - Generic
@@ -39,7 +39,7 @@ Add to project
 ## Step - Mongo DB Configuration
 
 
-### Define DI configuration interface for  DB context - IMongoDbConfiguration.cs
+### Define MongoDB configuration interface - IMongoDbConfiguration.cs
 ``` csharp
 public interface IMongoDbConfiguration
 {
@@ -48,7 +48,7 @@ public interface IMongoDbConfiguration
 }
 ```
 
-### Define  DB configuration - MongoDbConfiguration.cs
+### Define  MongoDB configuration - MongoDbConfiguration.cs
 ``` csharp
 public class MongoDbConfiguration : IMongoDbConfiguration
 {
@@ -58,35 +58,35 @@ public class MongoDbConfiguration : IMongoDbConfiguration
 ```
 
 
-### Define configuration 
-The main purpose to put  *MongoDbConfiguration* instance into .NetCore DI container.
+### Define MongoDB configuration 
+The main purpose is to put *MongoDbConfiguration* instance into .NetCore DI container.
 
 Here is *appsettings.json* fragment example. 
 
 ``` json
 {
-// ...
+
 
  "MongoDbConfiguration": {
     "DatabaseName": "docsmongodb",
     "DbConnectionString": "secrets-kv-mongodb-string-example"
   }
-  // ...
+
  }
 ```
 
-Configuration initialization may depends from your project.
+Configuration initialization may depend from your project.
 Here is an example that suitable for Hosted Service, Asp Net Core and Azure Functions (with .NetCore DI container)
 
 ``` csharp
-// ... 
+
 var builder = Host.CreateApplicationBuilder(args);
 
 var mongoDbConfiguration = builder.Configuration.GetSection(nameof(MongoDbConfiguration)).Get<MongoDbConfiguration>();
 
 builder.Services.AddSingleton<IMongoDbConfiguration>(mongoDbConfiguration);
 
-// ...
+
 
 ```
 
@@ -94,7 +94,7 @@ builder.Services.AddSingleton<IMongoDbConfiguration>(mongoDbConfiguration);
 
 The main purpose is to define MongoDB context that can be used for access of document repositories.
 
-### Define MongoDB context interface IServiceMongoDbContext.cs
+### Define MongoDB context interface - IServiceMongoDbContext.cs
 ``` csharp
 
 public interface IServiceMongoDbContext
@@ -105,7 +105,7 @@ public interface IServiceMongoDbContext
 
 ```
 
-### Define MongoDB context implementation - ServiceMongoDbContext.cs 
+### Define Service MongoDB context implementation - ServiceMongoDbContext.cs 
 
 ``` csharp
 
@@ -136,7 +136,7 @@ public class ServiceMongoDbContext : IServiceMongoDbContext
 
 ```
 
-### Add to DI container initialization 
+### Add to .NetCore DI container initialization 
 ``` csharp
 ...
 
@@ -314,7 +314,7 @@ public class OrderRepository : IOrderRepository
 ```
 
 
-### Add to DI container initialization 
+### Add to .NetCore DI container initialization 
 ``` csharp
 ...
 
@@ -325,10 +325,10 @@ builder.Services.AddTransient<IOrderRepository,OrderRepository>();
 
 ```
 
-## Step - Example of Using in hosted service
+## Step - Example of using in hosted service
 
 
-### Define hosted service to run 
+### Define hosted service
 ``` csharp
 
 public class Worker : BackgroundService
