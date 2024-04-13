@@ -8,94 +8,89 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mps.MongoDb.DataAccess
+namespace Mps.MongoDb.DataAccess;
+
+public partial class MongoDbDataAccess 
 {
-    public partial class MongoDbDataAccess 
+    /// <summary>
+    /// Asynchronously returns a projected document matching the filter condition.
+    /// </summary>
+    /// <typeparam name="TDocument">The type representing a Document.</typeparam>
+    /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
+    /// <param name="filter">A LINQ expression filter.</param>
+    /// <param name="projection">The projection expression.</param>
+    /// <param name="partitionKey">An optional partition key.</param>
+    /// <param name="cancellationToken">An optional cancellation Token.</param>
+    public virtual async Task<TProjection> ProjectOneAsync<TDocument, TProjection>(
+        Expression<Func<TDocument, bool>> filter, 
+        Expression<Func<TDocument, TProjection>> projection, 
+        string partitionKey = null,
+        CancellationToken cancellationToken = default)
+        where TDocument : IStructuredDocument
+        
+        where TProjection : class
     {
-        /// <summary>
-        /// Asynchronously returns a projected document matching the filter condition.
-        /// </summary>
-        /// <typeparam name="TDocument">The type representing a Document.</typeparam>
-        /// <typeparam name="TKey">The type of the primary key for a Document.</typeparam>
-        /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
-        /// <param name="filter">A LINQ expression filter.</param>
-        /// <param name="projection">The projection expression.</param>
-        /// <param name="partitionKey">An optional partition key.</param>
-        /// <param name="cancellationToken">An optional cancellation Token.</param>
-        public virtual async Task<TProjection> ProjectOneAsync<TDocument, TProjection, TKey>(
-            Expression<Func<TDocument, bool>> filter, 
-            Expression<Func<TDocument, TProjection>> projection, 
-            string partitionKey = null,
-            CancellationToken cancellationToken = default)
-            where TDocument : IStructuredDocument
-            
-            where TProjection : class
-        {
-            return await HandlePartitioned<TDocument>(partitionKey).Find(filter)
-                                                                         .Project(projection)
-                                                                         .FirstOrDefaultAsync(cancellationToken);
-        }
+        return await HandlePartitioned<TDocument>(partitionKey).Find(filter)
+                                                                     .Project(projection)
+                                                                     .FirstOrDefaultAsync(cancellationToken);
+    }
 
-        /// <summary>
-        /// Returns a projected document matching the filter condition.
-        /// </summary>
-        /// <typeparam name="TDocument">The type representing a Document.</typeparam>
-        /// <typeparam name="TKey">The type of the primary key for a Document.</typeparam>
-        /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
-        /// <param name="filter">A LINQ expression filter.</param>
-        /// <param name="projection">The projection expression.</param>
-        /// <param name="partitionKey">An optional partition key.</param>
-        public virtual TProjection ProjectOne<TDocument, TProjection, TKey>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TProjection>> projection, string partitionKey = null)
-            where TDocument : IStructuredDocument
-            
-            where TProjection : class
-        {
-            return HandlePartitioned<TDocument>(partitionKey).Find(filter)
-                                                                   .Project(projection)
-                                                                   .FirstOrDefault();
-        }
+    /// <summary>
+    /// Returns a projected document matching the filter condition.
+    /// </summary>
+    /// <typeparam name="TDocument">The type representing a Document.</typeparam>
+    /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
+    /// <param name="filter">A LINQ expression filter.</param>
+    /// <param name="projection">The projection expression.</param>
+    /// <param name="partitionKey">An optional partition key.</param>
+    public virtual TProjection ProjectOne<TDocument, TProjection>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TProjection>> projection, string partitionKey = null)
+        where TDocument : IStructuredDocument
+        
+        where TProjection : class
+    {
+        return HandlePartitioned<TDocument>(partitionKey).Find(filter)
+                                                               .Project(projection)
+                                                               .FirstOrDefault();
+    }
 
-        /// <summary>
-        /// Asynchronously returns a list of projected documents matching the filter condition.
-        /// </summary>
-        /// <typeparam name="TDocument">The type representing a Document.</typeparam>
-        /// <typeparam name="TKey">The type of the primary key for a Document.</typeparam>
-        /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
-        /// <param name="filter">A LINQ expression filter.</param>
-        /// <param name="projection">The projection expression.</param>
-        /// <param name="partitionKey">An optional partition key.</param>
-        /// <param name="cancellationToken">An optional cancellation Token.</param>
-        public virtual async Task<List<TProjection>> ProjectManyAsync<TDocument, TProjection, TKey>(
-            Expression<Func<TDocument, bool>> filter, 
-            Expression<Func<TDocument, TProjection>> projection, 
-            string partitionKey = null,
-            CancellationToken cancellationToken = default)
-            where TDocument : IStructuredDocument
-            
-            where TProjection : class
-        {
-            return await HandlePartitioned<TDocument>(partitionKey).Find(filter)
-                                                                   .Project(projection)
-                                                                   .ToListAsync(cancellationToken);
-        }
+    /// <summary>
+    /// Asynchronously returns a list of projected documents matching the filter condition.
+    /// </summary>
+    /// <typeparam name="TDocument">The type representing a Document.</typeparam>
+    /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
+    /// <param name="filter">A LINQ expression filter.</param>
+    /// <param name="projection">The projection expression.</param>
+    /// <param name="partitionKey">An optional partition key.</param>
+    /// <param name="cancellationToken">An optional cancellation Token.</param>
+    public virtual async Task<List<TProjection>> ProjectManyAsync<TDocument, TProjection>(
+        Expression<Func<TDocument, bool>> filter, 
+        Expression<Func<TDocument, TProjection>> projection, 
+        string partitionKey = null,
+        CancellationToken cancellationToken = default)
+        where TDocument : IStructuredDocument
+        
+        where TProjection : class
+    {
+        return await HandlePartitioned<TDocument>(partitionKey).Find(filter)
+                                                               .Project(projection)
+                                                               .ToListAsync(cancellationToken);
+    }
 
-        /// <summary>
-        /// Asynchronously returns a list of projected documents matching the filter condition.
-        /// </summary>
-        /// <typeparam name="TDocument">The type representing a Document.</typeparam>
-        /// <typeparam name="TKey">The type of the primary key for a Document.</typeparam>
-        /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
-        /// <param name="filter">The document filter.</param>
-        /// <param name="projection">The projection expression.</param>
-        /// <param name="partitionKey">An optional partition key.</param>
-        public virtual List<TProjection> ProjectMany<TDocument, TProjection, TKey>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TProjection>> projection, string partitionKey = null)
-            where TDocument : IStructuredDocument
-            
-            where TProjection : class
-        {
-            return HandlePartitioned<TDocument>(partitionKey).Find(filter)
-                                                                   .Project(projection)
-                                                                   .ToList();
-        }
+    /// <summary>
+    /// Asynchronously returns a list of projected documents matching the filter condition.
+    /// </summary>
+    /// <typeparam name="TDocument">The type representing a Document.</typeparam>
+    /// <typeparam name="TProjection">The type representing the model you want to project to.</typeparam>
+    /// <param name="filter">The document filter.</param>
+    /// <param name="projection">The projection expression.</param>
+    /// <param name="partitionKey">An optional partition key.</param>
+    public virtual List<TProjection> ProjectMany<TDocument, TProjection>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TProjection>> projection, string partitionKey = null)
+        where TDocument : IStructuredDocument
+        
+        where TProjection : class
+    {
+        return HandlePartitioned<TDocument>(partitionKey).Find(filter)
+                                                               .Project(projection)
+                                                               .ToList();
     }
 }

@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>$(DotNetCoreVersions)</TargetFrameworks>
+		<LangVersion>latest</LangVersion>
+
 	</PropertyGroup>
 
 	<ItemGroup>
