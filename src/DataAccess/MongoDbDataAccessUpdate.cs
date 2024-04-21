@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Mps.MongoDb.DataAccess;
 
+/// <summary>
+/// A class for handling  the Mongo Database and its Collections.
+/// </summary>
 public partial class MongoDbDataAccess  
 {
-
     /// <summary>
     /// Asynchronously Updates a document.
     /// </summary>
@@ -16,7 +18,6 @@ public partial class MongoDbDataAccess
     /// <param name="modifiedDocument">The document with the modifications you want to persist.</param>
     public virtual async Task<bool> UpdateOneAsync<TDocument>(TDocument modifiedDocument)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", modifiedDocument.Id);
         var updateRes = await HandlePartitioned<TDocument>(modifiedDocument).ReplaceOneAsync(filter, modifiedDocument);
@@ -30,7 +31,6 @@ public partial class MongoDbDataAccess
     /// <param name="modifiedDocument">The document with the modifications you want to persist.</param>
     public virtual bool UpdateOne<TDocument>(TDocument modifiedDocument)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", modifiedDocument.Id);
         var updateRes = HandlePartitioned<TDocument>(modifiedDocument).ReplaceOne(filter, modifiedDocument);
@@ -45,7 +45,6 @@ public partial class MongoDbDataAccess
     /// <param name="update">The update definition for the document.</param>
     public virtual async Task<bool> UpdateOneAsync<TDocument>(TDocument documentToModify, UpdateDefinition<TDocument> update)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = await HandlePartitioned<TDocument>(documentToModify).UpdateOneAsync(filter, update);
@@ -60,7 +59,6 @@ public partial class MongoDbDataAccess
     /// <param name="update">The update definition for the document.</param>
     public virtual bool UpdateOne<TDocument>(TDocument documentToModify, UpdateDefinition<TDocument> update)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = HandlePartitioned<TDocument>(documentToModify).UpdateOne(filter, update);
@@ -77,7 +75,6 @@ public partial class MongoDbDataAccess
     /// <param name="value">The new value of the property field.</param>
     public virtual async Task<bool> UpdateOneAsync<TDocument,  TField>(TDocument documentToModify, Expression<Func<TDocument, TField>> field, TField value)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = await HandlePartitioned<TDocument>(documentToModify).UpdateOneAsync(filter, Builders<TDocument>.Update.Set(field, value));
@@ -94,7 +91,6 @@ public partial class MongoDbDataAccess
     /// <param name="value">The new value of the property field.</param>
     public virtual bool UpdateOne<TDocument,  TField>(TDocument documentToModify, Expression<Func<TDocument, TField>> field, TField value)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = HandlePartitioned<TDocument>(documentToModify).UpdateOne(filter, Builders<TDocument>.Update.Set(field, value));
@@ -112,7 +108,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The value of the partition key.</param>
     public virtual async Task<bool> UpdateOneAsync<TDocument,  TField>(FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = await collection.UpdateOneAsync(filter, Builders<TDocument>.Update.Set(field, value));
@@ -130,7 +125,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The partition key for the document.</param>
     public virtual async Task<bool> UpdateOneAsync<TDocument,  TField>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return await UpdateOneAsync<TDocument,  TField>(Builders<TDocument>.Filter.Where(filter), field, value, partitionKey);
     }
@@ -146,7 +140,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The value of the partition key.</param>
     public virtual bool UpdateOne<TDocument,  TField>(FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = collection.UpdateOne(filter, Builders<TDocument>.Update.Set(field, value));
@@ -164,7 +157,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The partition key for the document.</param>
     public virtual bool UpdateOne<TDocument,  TField>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return UpdateOne<TDocument,  TField>(Builders<TDocument>.Filter.Where(filter), field, value, partitionKey);
     }
@@ -180,7 +172,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The partition key for the document.</param>
     public virtual async Task<long> UpdateManyAsync<TDocument,  TField>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return await UpdateManyAsync<TDocument,  TField>(Builders<TDocument>.Filter.Where(filter), field, value, partitionKey);
     }
@@ -196,7 +187,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The value of the partition key.</param>
     public virtual async Task<long> UpdateManyAsync<TDocument,  TField>(FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = await collection.UpdateManyAsync(filter, Builders<TDocument>.Update.Set(field, value));
@@ -212,7 +202,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The value of the partition key.</param>
     public virtual async Task<long> UpdateManyAsync<TDocument>(Expression<Func<TDocument, bool>> filter, UpdateDefinition<TDocument> update, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return await UpdateManyAsync<TDocument>(Builders<TDocument>.Filter.Where(filter), update, partitionKey);
     }
@@ -226,7 +215,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The value of the partition key.</param>
     public virtual async Task<long> UpdateManyAsync<TDocument>(FilterDefinition<TDocument> filter, UpdateDefinition<TDocument> updateDefinition, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = await collection.UpdateManyAsync(filter, updateDefinition);
@@ -244,7 +232,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The partition key for the document.</param>
     public virtual long UpdateMany<TDocument,  TField>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return UpdateMany<TDocument,  TField>(Builders<TDocument>.Filter.Where(filter), field, value, partitionKey);
     }
@@ -260,7 +247,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The value of the partition key.</param>
     public virtual long UpdateMany<TDocument,  TField>(FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = collection.UpdateMany(filter, Builders<TDocument>.Update.Set(field, value));
@@ -276,7 +262,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The value of the partition key.</param>
     public virtual long UpdateMany<TDocument>(FilterDefinition<TDocument> filter, UpdateDefinition<TDocument> UpdateDefinition, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = collection.UpdateMany(filter, UpdateDefinition);

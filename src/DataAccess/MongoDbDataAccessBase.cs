@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 namespace DotNet.Mps.MongoDb.DataAccess;
 
 /// <summary>
-/// A base class for accessing the Database and its Collections.
+/// A class for handling  the Mongo Database and its Collections.
 /// </summary>
 public class MongoDbDataAccessBase
 {
@@ -26,8 +26,6 @@ public class MongoDbDataAccessBase
         MongoDbContext = mongoDbContext;
     }
 
-    #region Utility Methods
-
     /// <summary>
     /// Gets a IMongoQueryable for a potentially partitioned document type and a filter.
     /// </summary>
@@ -37,7 +35,6 @@ public class MongoDbDataAccessBase
     /// <returns></returns>
     public virtual IMongoQueryable<TDocument> GetQuery<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null)
         where TDocument : IStructuredDocument
-
     {
         return GetCollection<TDocument>(partitionKey).AsQueryable().Where(filter);
     }
@@ -50,7 +47,6 @@ public class MongoDbDataAccessBase
     /// <returns></returns>
     public virtual IMongoCollection<TDocument> HandlePartitioned<TDocument>(TDocument document)
         where TDocument : IStructuredDocument
-
     {
         if (document is IPartitionedDocument)
         {
@@ -67,7 +63,6 @@ public class MongoDbDataAccessBase
     /// <returns></returns>
     public virtual IMongoCollection<TDocument> GetCollection<TDocument>(string partitionKey = null)
         where TDocument : IStructuredDocument
-
     {
         return MongoDbContext.GetCollection<TDocument>(partitionKey);
     }
@@ -80,7 +75,6 @@ public class MongoDbDataAccessBase
     /// <returns></returns>
     public virtual IMongoCollection<TDocument> HandlePartitioned<TDocument>(string partitionKey)
         where TDocument : IStructuredDocument
-
     {
         if (!string.IsNullOrEmpty(partitionKey))
         {
@@ -139,7 +133,6 @@ public class MongoDbDataAccessBase
     /// <param name="partitionKey">An optional partition key.</param>
     protected virtual IFindFluent<TDocument, TDocument> GetMinMongoQuery<TDocument,  TValue>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TValue>> minValueSelector, string partitionKey = null)
                 where TDocument : IStructuredDocument
-
     {
         return GetCollection<TDocument>(partitionKey).Find(Builders<TDocument>.Filter.Where(filter))
                                                            .SortBy(ConvertExpression(minValueSelector))
@@ -156,13 +149,9 @@ public class MongoDbDataAccessBase
     /// <param name="partitionKey">An optional partition key.</param>
     protected virtual IFindFluent<TDocument, TDocument> GetMaxMongoQuery<TDocument,  TValue>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TValue>> maxValueSelector, string partitionKey = null)
                 where TDocument : IStructuredDocument
-
     {
         return GetCollection<TDocument>(partitionKey).Find(Builders<TDocument>.Filter.Where(filter))
                                                            .SortByDescending(ConvertExpression(maxValueSelector))
                                                            .Limit(1);
     }
-
-
-    #endregion
 }

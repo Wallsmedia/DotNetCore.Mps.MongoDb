@@ -21,7 +21,7 @@
 		<Product>DotNet Mps MongoDb Access</Product>
 		<Authors>Wallsmedia Ltd</Authors>
 		<Copyright>Copyright $([System.DateTime]::Now.ToString('yyyy')) © Artem &amp; Alex Paskhin. All rights reserved.</Copyright>
-		<Version>2.0.1</Version>
+		<Version>2.0.2</Version>
 	</PropertyGroup>
 
 </Project>

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Mps.MongoDb.DataAccess;
 
 /// <summary>
-/// A class to insert MongoDb document.
+/// A class for handling  the Mongo Database and its Collections.
 /// </summary>
 public partial class MongoDbDataAccess : MongoDbDataAccessBase, IMongoDbDataAccess
 {
@@ -24,8 +24,6 @@ public partial class MongoDbDataAccess : MongoDbDataAccessBase, IMongoDbDataAcce
     {
     }
 
-    #region Create TKey
-
     /// <summary>
     /// Asynchronously adds a document to the collection.
     /// Populates the Id and AddedAtUtc fields if necessary.
@@ -35,7 +33,6 @@ public partial class MongoDbDataAccess : MongoDbDataAccessBase, IMongoDbDataAcce
     /// <param name="cancellationToken">An optional cancellation Token.</param>
     public virtual async Task AddOneAsync<TDocument>(TDocument document, CancellationToken cancellationToken = default)
         where TDocument : IStructuredDocument
-
     {
         FormatDocument<TDocument>(document);
         await HandlePartitioned<TDocument>(document).InsertOneAsync(document, null, cancellationToken);
@@ -47,9 +44,7 @@ public partial class MongoDbDataAccess : MongoDbDataAccessBase, IMongoDbDataAcce
     /// </summary>
     /// <typeparam name="TDocument">The type representing a Document.</typeparam>
     /// <param name="document">The document you want to add.</param>
-    public virtual void AddOne<TDocument>(TDocument document)
-        where TDocument : IStructuredDocument
-
+    public virtual void AddOne<TDocument>(TDocument document) where TDocument : IStructuredDocument
     {
         FormatDocument<TDocument>(document);
         HandlePartitioned<TDocument>(document).InsertOne(document);
@@ -64,7 +59,6 @@ public partial class MongoDbDataAccess : MongoDbDataAccessBase, IMongoDbDataAcce
     /// <param name="cancellationToken">An optional cancellation Token.</param>
     public virtual async Task AddManyAsync<TDocument>(IEnumerable<TDocument> documents, CancellationToken cancellationToken = default)
         where TDocument : IStructuredDocument
-
     {
         if (!documents.Any())
         {
@@ -96,7 +90,6 @@ public partial class MongoDbDataAccess : MongoDbDataAccessBase, IMongoDbDataAcce
     /// <param name="documents">The documents you want to add.</param>
     public virtual void AddMany<TDocument>(IEnumerable<TDocument> documents)
         where TDocument : IStructuredDocument
-
     {
         if (!documents.Any())
         {
@@ -120,16 +113,13 @@ public partial class MongoDbDataAccess : MongoDbDataAccessBase, IMongoDbDataAcce
         }
     }
 
-    #endregion
 
     /// <summary>
     /// Sets the value of the document Id if it is not set already.
     /// </summary>
     /// <typeparam name="TDocument">The document type.</typeparam>
     /// <param name="document">The document.</param>
-    protected void FormatDocument<TDocument>(TDocument document)
-        where TDocument : IStructuredDocument
-
+    protected void FormatDocument<TDocument>(TDocument document) where TDocument : IStructuredDocument
     {
         if (document == null)
         {

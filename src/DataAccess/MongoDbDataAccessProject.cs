@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Mps.MongoDb.DataAccess;
 
+/// <summary>
+/// A class for handling  the Mongo Database and its Collections.
+/// </summary>
 public partial class MongoDbDataAccess 
 {
     /// <summary>
@@ -27,7 +30,6 @@ public partial class MongoDbDataAccess
         string partitionKey = null,
         CancellationToken cancellationToken = default)
         where TDocument : IStructuredDocument
-        
         where TProjection : class
     {
         return await HandlePartitioned<TDocument>(partitionKey).Find(filter)
@@ -45,7 +47,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">An optional partition key.</param>
     public virtual TProjection ProjectOne<TDocument, TProjection>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TProjection>> projection, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
         where TProjection : class
     {
         return HandlePartitioned<TDocument>(partitionKey).Find(filter)
@@ -68,7 +69,6 @@ public partial class MongoDbDataAccess
         string partitionKey = null,
         CancellationToken cancellationToken = default)
         where TDocument : IStructuredDocument
-        
         where TProjection : class
     {
         return await HandlePartitioned<TDocument>(partitionKey).Find(filter)
@@ -86,7 +86,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">An optional partition key.</param>
     public virtual List<TProjection> ProjectMany<TDocument, TProjection>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TProjection>> projection, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
         where TProjection : class
     {
         return HandlePartitioned<TDocument>(partitionKey).Find(filter)

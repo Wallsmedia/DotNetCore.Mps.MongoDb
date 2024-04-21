@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace Mps.MongoDb.DataAccess;
 
-public partial class MongoDbDataAccess 
+/// <summary>
+/// A class for handling  the Mongo Database and its Collections.
+/// </summary>
+public partial class MongoDbDataAccess
 {
     /// <summary>
     /// Updates a document.
@@ -19,7 +22,6 @@ public partial class MongoDbDataAccess
     /// <returns></returns>
     public virtual async Task<bool> UpdateOneAsync<TDocument>(IClientSessionHandle session, TDocument modifiedDocument, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", modifiedDocument.Id);
         var updateRes = await HandlePartitioned<TDocument>(modifiedDocument)
@@ -38,7 +40,6 @@ public partial class MongoDbDataAccess
     /// <returns></returns>
     public virtual bool UpdateOne<TDocument>(IClientSessionHandle session, TDocument modifiedDocument, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", modifiedDocument.Id);
         var updateRes = HandlePartitioned<TDocument>(modifiedDocument).ReplaceOne(session, filter, modifiedDocument, cancellationToken: cancellationToken);
@@ -56,7 +57,6 @@ public partial class MongoDbDataAccess
     /// <returns></returns>
     public virtual async Task<bool> UpdateOneAsync<TDocument>(IClientSessionHandle session, TDocument documentToModify, UpdateDefinition<TDocument> update, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = await HandlePartitioned<TDocument>(documentToModify).UpdateOneAsync(session, filter, update, null, cancellationToken).ConfigureAwait(false);
@@ -74,7 +74,6 @@ public partial class MongoDbDataAccess
     /// <returns></returns>
     public virtual bool UpdateOne<TDocument>(IClientSessionHandle session, TDocument documentToModify, UpdateDefinition<TDocument> update, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = HandlePartitioned<TDocument>(documentToModify).UpdateOne(session, filter, update, null, cancellationToken);
@@ -92,9 +91,8 @@ public partial class MongoDbDataAccess
     /// <param name="value">The value of the field.</param>
     /// <param name="cancellationToken">The optional cancellation token.</param>
     /// <returns></returns>
-    public virtual async Task<bool> UpdateOneAsync<TDocument,  TField>(IClientSessionHandle session, TDocument documentToModify, Expression<Func<TDocument, TField>> field, TField value, CancellationToken cancellationToken = default(CancellationToken))
+    public virtual async Task<bool> UpdateOneAsync<TDocument, TField>(IClientSessionHandle session, TDocument documentToModify, Expression<Func<TDocument, TField>> field, TField value, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = await HandlePartitioned<TDocument>(documentToModify)
@@ -115,9 +113,8 @@ public partial class MongoDbDataAccess
     /// <param name="value">The value of the field.</param>
     /// <param name="cancellationToken">The optional cancellation token.</param>
     /// <returns></returns>
-    public virtual bool UpdateOne<TDocument,  TField>(IClientSessionHandle session, TDocument documentToModify, Expression<Func<TDocument, TField>> field, TField value, CancellationToken cancellationToken = default(CancellationToken))
+    public virtual bool UpdateOne<TDocument, TField>(IClientSessionHandle session, TDocument documentToModify, Expression<Func<TDocument, TField>> field, TField value, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", documentToModify.Id);
         var updateRes = HandlePartitioned<TDocument>(documentToModify).UpdateOne(session, filter, Builders<TDocument>.Update.Set(field, value), cancellationToken: cancellationToken);
@@ -136,9 +133,8 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The optional partition key.</param>
     /// <param name="cancellationToken">The optional cancellation token.</param>
     /// <returns></returns>
-    public virtual async Task<bool> UpdateOneAsync<TDocument,  TField>(IClientSessionHandle session, FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
+    public virtual async Task<bool> UpdateOneAsync<TDocument, TField>(IClientSessionHandle session, FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = await collection.UpdateOneAsync(session, filter, Builders<TDocument>.Update.Set(field, value), cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -157,11 +153,10 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The optional partition key.</param>
     /// <param name="cancellationToken">The optional cancellation token.</param>
     /// <returns></returns>
-    public virtual Task<bool> UpdateOneAsync<TDocument,  TField>(IClientSessionHandle session, Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
+    public virtual Task<bool> UpdateOneAsync<TDocument, TField>(IClientSessionHandle session, Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
-        return UpdateOneAsync<TDocument,  TField>(session, Builders<TDocument>.Filter.Where(filter), field, value, partitionKey, cancellationToken);
+        return UpdateOneAsync<TDocument, TField>(session, Builders<TDocument>.Filter.Where(filter), field, value, partitionKey, cancellationToken);
     }
 
     /// <summary>
@@ -176,9 +171,8 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The optional partition key.</param>
     /// <param name="cancellationToken">The optional cancellation token.</param>
     /// <returns></returns>
-    public virtual bool UpdateOne<TDocument,  TField>(IClientSessionHandle session, FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
+    public virtual bool UpdateOne<TDocument, TField>(IClientSessionHandle session, FilterDefinition<TDocument> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
         var collection = string.IsNullOrEmpty(partitionKey) ? GetCollection<TDocument>() : GetCollection<TDocument>(partitionKey);
         var updateRes = collection.UpdateOne(session, filter, Builders<TDocument>.Update.Set(field, value), cancellationToken: cancellationToken);
@@ -197,10 +191,9 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">The optional partition key.</param>
     /// <param name="cancellationToken">The optional cancellation token.</param>
     /// <returns></returns>
-    public virtual bool UpdateOne<TDocument,  TField>(IClientSessionHandle session, Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
+    public virtual bool UpdateOne<TDocument, TField>(IClientSessionHandle session, Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TField>> field, TField value, string partitionKey = null, CancellationToken cancellationToken = default(CancellationToken))
         where TDocument : IStructuredDocument
-    
     {
-        return UpdateOne<TDocument,  TField>(session, Builders<TDocument>.Filter.Where(filter), field, value, partitionKey, cancellationToken);
+        return UpdateOne<TDocument, TField>(session, Builders<TDocument>.Filter.Where(filter), field, value, partitionKey, cancellationToken);
     }
 }

@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace Mps.MongoDb.DataAccess;
 
-public partial class MongoDbDataAccess 
+/// <summary>
+/// A class for handling  the Mongo Database and its Collections.
+/// </summary>
+public partial class MongoDbDataAccess
 {
-  
-
     /// <summary>
     /// Returns the names of the indexes present on a collection.
     /// </summary>
@@ -21,7 +22,6 @@ public partial class MongoDbDataAccess
     /// <returns>A list containing the names of the indexes on on the concerned collection.</returns>
     public async virtual Task<List<string>> GetIndexesNamesAsync<TDocument>(string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var indexCursor = await HandlePartitioned<TDocument>(partitionKey).Indexes.ListAsync();
         var indexes = await indexCursor.ToListAsync();
@@ -40,7 +40,6 @@ public partial class MongoDbDataAccess
     /// <returns>The result of the create index operation.</returns>
     public async virtual Task<string> CreateTextIndexAsync<TDocument>(Expression<Func<TDocument, object>> field, IndexCreationOptions indexCreationOptions = null, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return await HandlePartitioned<TDocument>(partitionKey).Indexes
                                                                .CreateOneAsync(
@@ -62,7 +61,6 @@ public partial class MongoDbDataAccess
     /// <returns>The result of the create index operation.</returns>
     public async virtual Task<string> CreateAscendingIndexAsync<TDocument>(Expression<Func<TDocument, object>> field, IndexCreationOptions indexCreationOptions = null, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = HandlePartitioned<TDocument>(partitionKey);
         var createOptions = indexCreationOptions == null ? null : MapIndexOptions(indexCreationOptions);
@@ -84,7 +82,6 @@ public partial class MongoDbDataAccess
     /// <returns>The result of the create index operation.</returns>
     public async virtual Task<string> CreateDescendingIndexAsync<TDocument>(Expression<Func<TDocument, object>> field, IndexCreationOptions indexCreationOptions = null, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = HandlePartitioned<TDocument>(partitionKey);
         var createOptions = indexCreationOptions == null ? null : MapIndexOptions(indexCreationOptions);
@@ -106,7 +103,6 @@ public partial class MongoDbDataAccess
     /// <returns>The result of the create index operation.</returns>
     public async virtual Task<string> CreateHashedIndexAsync<TDocument>(Expression<Func<TDocument, object>> field, IndexCreationOptions indexCreationOptions = null, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = HandlePartitioned<TDocument>(partitionKey);
         var createOptions = indexCreationOptions == null ? null : MapIndexOptions(indexCreationOptions);
@@ -128,7 +124,6 @@ public partial class MongoDbDataAccess
     /// <returns>The result of the create index operation.</returns>
     public async virtual Task<string> CreateCombinedTextIndexAsync<TDocument>(IEnumerable<Expression<Func<TDocument, object>>> fields, IndexCreationOptions indexCreationOptions = null, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         var collection = HandlePartitioned<TDocument>(partitionKey);
         var createOptions = indexCreationOptions == null ? null : MapIndexOptions(indexCreationOptions);
@@ -149,7 +144,6 @@ public partial class MongoDbDataAccess
     /// <param name="partitionKey">An optional partition key</param>
     public async virtual Task DropIndexAsync<TDocument>(string indexName, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         await HandlePartitioned<TDocument>(partitionKey).Indexes.DropOneAsync(indexName);
     }

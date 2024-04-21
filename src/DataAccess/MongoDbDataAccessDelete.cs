@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace Mps.MongoDb.DataAccess;
 
-public partial class MongoDbDataAccess  
+/// <summary>
+/// A class for handling  the Mongo Database and its Collections.
+/// </summary>
+public partial class MongoDbDataAccess
 {
-  
-
-    #region Delete TKey
-
     /// <summary>
     /// Deletes a document.
     /// </summary>
@@ -23,7 +22,6 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual long DeleteOne<TDocument>(TDocument document)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", document.Id);
         return HandlePartitioned<TDocument>(document).DeleteOne(filter).DeletedCount;
@@ -37,7 +35,6 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual async Task<long> DeleteOneAsync<TDocument>(TDocument document)
         where TDocument : IStructuredDocument
-        
     {
         var filter = Builders<TDocument>.Filter.Eq("Id", document.Id);
         return (await HandlePartitioned<TDocument>(document).DeleteOneAsync(filter)).DeletedCount;
@@ -52,7 +49,6 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual long DeleteOne<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return HandlePartitioned<TDocument>(partitionKey).DeleteOne(filter).DeletedCount;
     }
@@ -66,7 +62,6 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual async Task<long> DeleteOneAsync<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return (await HandlePartitioned<TDocument>(partitionKey).DeleteOneAsync(filter)).DeletedCount;
     }
@@ -80,7 +75,6 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual async Task<long> DeleteManyAsync<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return (await HandlePartitioned<TDocument>(partitionKey).DeleteManyAsync(filter)).DeletedCount;
     }
@@ -93,7 +87,6 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual async Task<long> DeleteManyAsync<TDocument>(IEnumerable<TDocument> documents)
         where TDocument : IStructuredDocument
-        
     {
         if (!documents.Any())
         {
@@ -125,7 +118,6 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual long DeleteMany<TDocument>(IEnumerable<TDocument> documents)
         where TDocument : IStructuredDocument
-        
     {
         if (!documents.Any())
         {
@@ -158,11 +150,7 @@ public partial class MongoDbDataAccess
     /// <returns>The number of documents deleted.</returns>
     public virtual long DeleteMany<TDocument>(Expression<Func<TDocument, bool>> filter, string partitionKey = null)
         where TDocument : IStructuredDocument
-        
     {
         return HandlePartitioned<TDocument>(partitionKey).DeleteMany(filter).DeletedCount;
     }
-
-    #endregion
-
 }
